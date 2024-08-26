@@ -29,6 +29,9 @@ public class JDBCTemplate {
             // url과 properties를 전달할 수도 있다.
 //            DriverManager.getConnection(url, props); -> props 파일에서 user, password 키 값을 읽어서 처리
 
+            // 자동 커밋 설정을 수동 커밋 설정으로 변경하여 서비스에서 처리할 수 있도록 한다. -> dml 구문의 commit, rollback 위함
+            con.setAutoCommit(false);
+
             System.out.println("con = " + con);
         } catch (Exception e) {
             // 여러 Exception을 하나로 처리함
@@ -66,5 +69,26 @@ public class JDBCTemplate {
             throw new RuntimeException(e);
         }
     }
+
+    public static void commit(Connection con) {
+        try {
+            if (con != null && !con.isClosed()) {   // 해당 객체가 존재하고, 열려있을 경우 commit 한다.
+                con.commit();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void rollback(Connection con) {
+        try {
+            if (con != null && !con.isClosed()) {   // 해당 객체가 존재하고, 열려있을 경우 rollback 한다.
+                con.commit();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
